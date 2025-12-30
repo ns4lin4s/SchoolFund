@@ -13,4 +13,12 @@ contract SchoolFund {
         //the deployer becomes the treasurer
         treasurer = msg.sender;
     }
+
+    // Allows parents to pay their monthly fee
+    function payFee() public payable {
+        require(msg.value > 0, "Fee must be greater than 0");
+        
+        contributions[msg.sender] += msg.value;
+        totalFund += msg.value;
+    }
 }
