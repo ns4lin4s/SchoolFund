@@ -14,6 +14,10 @@ contract SchoolFund {
 
     Expense[] public expenseHistory;
 
+    // Events for transparency
+    event FeePaid(address indexed parent, uint256 amount);
+    event ExpenseExecuted(address indexed recipient, uint256 amount, string description);
+
     // Mapping to track how much each parent has contributed
     mapping(address => uint256) public contributions;
 
@@ -28,6 +32,7 @@ contract SchoolFund {
         
         contributions[msg.sender] += msg.value;
         totalFund += msg.value;
+        emit FeePaid(msg.sender, msg.value);
     }
 
     function executeExpense(uint256 _amount, string memory _description, address payable _recipient) public {
@@ -45,5 +50,7 @@ contract SchoolFund {
         }));
         
         totalFund -= _amount;
+
+        emit ExpenseExecuted(_recipient, _amount, _description);
     }
 }
